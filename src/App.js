@@ -1,24 +1,43 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import { Header } from "./components/Header";
+import { SubredditsTab } from "./components/SubredditsTab";
+import { CardsList } from "./components/CardsList";
+
+import { useGetPageByNameQuery } from "./services/reddit";
+import { fetchCategories } from "./features/categoriesSlice/categoriesSlice";
+import { useDispatch } from "react-redux";
 
 function App() {
+
+  const dispatch = useDispatch()
+  // const { data, error, isLoading } = useGetPageByNameQuery("popular");
+  
+  // console.log(data);
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <Header/>
+      <SubredditsTab />
+      <CardsList/>
+      <button onClick={() => dispatch(fetchCategories())}>FETCH CATEGORIES</button>
     </div>
+    // <div className='App'>
+    //   {error ? (
+    //     <>Oh no, there was an error</>
+    //   ) : isLoading ? (
+    //     <>Loading...</>
+    //   ) : data ? (
+    //     <>
+    //       {data.data.children.map(post => (
+    //         <div>
+    //         <h1>{post.data.title}</h1>
+    //         <img src={post.data.thumbnail} alt="" />
+    //         </div>
+    //         ))}
+    //     </>
+    //   ) : null}
+    // </div>
   );
 }
 
