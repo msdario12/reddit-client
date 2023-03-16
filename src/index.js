@@ -6,6 +6,9 @@ import reportWebVitals from './reportWebVitals';
 import { Provider } from 'react-redux'
 import store from './app/store';
 import { ChakraProvider } from '@chakra-ui/react';
+import { fetchCategories } from './features/categoriesSlice/categoriesSlice';
+
+store.dispatch(fetchCategories())
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(

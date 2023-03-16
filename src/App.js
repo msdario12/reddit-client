@@ -1,6 +1,6 @@
 import "./App.css";
 import { Header } from "./components/Header";
-import { SubredditsTab } from "./components/SubredditsTab";
+import { CategoriesTab } from "./features/categoriesSlice/CategoriesTab";
 import { CardsList } from "./components/CardsList";
 
 import { useGetPageByNameQuery } from "./services/reddit";
@@ -18,7 +18,7 @@ function App() {
   return (
     <div>
       <Header/>
-      <SubredditsTab />
+      <CategoriesTab />
       <CardsList/>
       <button onClick={() => dispatch(fetchCategories())}>FETCH CATEGORIES</button>
     </div>
