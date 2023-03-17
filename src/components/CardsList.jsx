@@ -1,11 +1,11 @@
-import { Card } from "./Card"
+import { Post } from "../features/postsSlice/Post"
 
 export const CardsList = () => {
 
 
     return(
         <div>
-            <Card/>
+            <Post/>
         </div>
     )
 }

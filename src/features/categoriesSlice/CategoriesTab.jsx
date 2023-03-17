@@ -1,5 +1,5 @@
 import { useSelector } from "react-redux"
-import { selectAllCategories, selectAllCategoriesIds, selectCategoryById } from "./categoriesSlice"
+import { selectAllCategoriesIds, selectCategoryById } from "./categoriesSlice"
 
 const CategoryExcerpt = ({categoryId}) => {
     const category = useSelector(state => selectCategoryById(state, categoryId))

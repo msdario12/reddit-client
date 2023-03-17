@@ -3,41 +3,37 @@ import { Header } from "./components/Header";
 import { CategoriesTab } from "./features/categoriesSlice/CategoriesTab";
 import { CardsList } from "./components/CardsList";
 
-import { useGetPageByNameQuery } from "./services/reddit";
 import { fetchCategories } from "./features/categoriesSlice/categoriesSlice";
 import { useDispatch } from "react-redux";
+import { Link, Outlet } from "react-router-dom";
+import { fetchPostsFromCategory } from "./features/postsSlice/postsSlice";
 
 function App() {
 
   const dispatch = useDispatch()
-  // const { data, error, isLoading } = useGetPageByNameQuery("popular");
-  
-  // console.log(data);
 
 
   return (
     <div>
+      <nav>
+        <ul>
+          <li>
+            <Link to={'post/1'}>Ir a post 1</Link>
+          </li>
+        </ul>
+      </nav>
       <Header/>
       <CategoriesTab />
       <CardsList/>
-      <button onClick={() => dispatch(fetchCategories())}>FETCH CATEGORIES</button>
+      <button onClick={() => dispatch(fetchPostsFromCategory('/r/redditdev'))}>FETCH POSTS</button>
+      <div>
+        <h3>Aca va un post</h3>
+        <div>
+          <Outlet />
+        </div>
+      </div>
     </div>
-    // <div className='App'>
-    //   {error ? (
-    //     <>Oh no, there was an error</>
-    //   ) : isLoading ? (
-    //     <>Loading...</>
-    //   ) : data ? (
-    //     <>
-    //       {data.data.children.map(post => (
-    //         <div>
-    //         <h1>{post.data.title}</h1>
-    //         <img src={post.data.thumbnail} alt="" />
-    //         </div>
-    //         ))}
-    //     </>
-    //   ) : null}
-    // </div>
+
   );
 }
 

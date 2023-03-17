@@ -1,24 +1,43 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
-import { Provider } from 'react-redux'
-import store from './app/store';
-import { ChakraProvider } from '@chakra-ui/react';
-import { fetchCategories } from './features/categoriesSlice/categoriesSlice';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
+import { Provider } from "react-redux";
+import store from "./app/store";
+import { ChakraProvider } from "@chakra-ui/react";
+import { fetchCategories } from "./features/categoriesSlice/categoriesSlice";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import ErrorPage from "./error-page";
+import { Post } from "./features/postsSlice/Post";
 
-store.dispatch(fetchCategories())
+store.dispatch(fetchCategories());
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <App />,
+		errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "post/:postId",
+        element: <Post />,
+		loader: ({params}) => {
+			return params.postId
+		}
+      },
+    ]
+	},
+  
+]);
+
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
-
-  <React.StrictMode>
-  <Provider store={store}>
-    <App />
-  </Provider>
-  </React.StrictMode>
-
+	<React.StrictMode>
+		<Provider store={store}>
+			<RouterProvider router={router} />
+		</Provider>
+	</React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function
