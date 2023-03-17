@@ -1,13 +1,16 @@
-import { useLoaderData } from "react-router-dom"
 
-export const Post = () => {
+import { useSelector } from 'react-redux';
+import { selectAllPostsIds, selectPostById } from './postsSlice';
 
-    const postId = useLoaderData()
+export const Post = ({id}) => {
 
+    const post = useSelector(state => state.posts.entities[id])
 
     return(
         <div>
-             <h3>{postId && `El id del post es ${postId}`}</h3>
+           <h2>{post.title}</h2>
+           <p>{post.content}</p>
+           <img src={post.img} alt=""  style={{width: '50%'}}/>
         </div>
     )
 }

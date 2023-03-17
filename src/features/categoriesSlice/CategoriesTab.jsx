@@ -1,10 +1,11 @@
 import { useSelector } from "react-redux"
+import { Link } from "react-router-dom"
 import { selectAllCategoriesIds, selectCategoryById } from "./categoriesSlice"
 
 const CategoryExcerpt = ({categoryId}) => {
     const category = useSelector(state => selectCategoryById(state, categoryId))
     return(
-        <li>{category.title}</li>
+        <li><Link to={category.id}>{category.title}</Link></li>
     )
 }
 

@@ -10,6 +10,7 @@ import { fetchCategories } from "./features/categoriesSlice/categoriesSlice";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./error-page";
 import { Post } from "./features/postsSlice/Post";
+import { CardsList } from "./components/CardsList";
 
 store.dispatch(fetchCategories());
 
@@ -17,13 +18,13 @@ const router = createBrowserRouter([
 	{
 		path: "/",
 		element: <App />,
-		errorElement: <ErrorPage />,
+		// errorElement: <ErrorPage />,
     children: [
       {
-        path: "post/:postId",
-        element: <Post />,
+        path: "r/:categoryId",
+        element: <CardsList />,
 		loader: ({params}) => {
-			return params.postId
+			return params.categoryId
 		}
       },
     ]

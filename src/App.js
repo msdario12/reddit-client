@@ -1,8 +1,6 @@
 import "./App.css";
 import { Header } from "./components/Header";
 import { CategoriesTab } from "./features/categoriesSlice/CategoriesTab";
-import { CardsList } from "./components/CardsList";
-
 import { fetchCategories } from "./features/categoriesSlice/categoriesSlice";
 import { useDispatch } from "react-redux";
 import { Link, Outlet } from "react-router-dom";
@@ -24,7 +22,7 @@ function App() {
       </nav>
       <Header/>
       <CategoriesTab />
-      <CardsList/>
+
       <button onClick={() => dispatch(fetchPostsFromCategory('/r/redditdev'))}>FETCH POSTS</button>
       <div>
         <h3>Aca va un post</h3>
