@@ -11,6 +11,7 @@ import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import ErrorPage from "./error-page";
 import { Post } from "./features/postsSlice/Post";
 import { CardsList } from "./components/CardsList";
+import { SinglePost } from "./features/postsSlice/SinglePost";
 
 store.dispatch(fetchCategories());
 
@@ -25,6 +26,13 @@ const router = createBrowserRouter([
         element: <CardsList />,
 		loader: ({params}) => {
 			return params.categoryId
+		}
+      },
+      {
+        path: "r/:categoryId/comments/:postId/:postTitle",
+        element: <SinglePost />,
+		loader: ({params}) => {
+			return params.postId
 		}
       },
     ]
