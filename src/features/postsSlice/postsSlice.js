@@ -26,6 +26,13 @@ export const fetchPostsFromCategory = createAsyncThunk(
 			const id = url.slice(index+3,index+3+11)
 			return id;
 		}
+		const getRedditVideoUrl = (url) => {
+			if (url.includes('v.redd.it')) {
+				return url
+			} else {
+				return false
+			}
+		}
 		jsonResponse.data.children.forEach((entry) => {
 			arrayResponse.push({
 				id: entry.data.id,
@@ -44,6 +51,9 @@ export const fetchPostsFromCategory = createAsyncThunk(
 				upvote_ratio: entry.data.upvote_ratio,
 				num_comments: entry.data.num_comments,
 				youtube_id_video: getYoutubeVideoId(entry.data.url),
+				reddit_video_url: entry.data.secure_media.reddit_video.fallback_url ? entry.data.secure_media.reddit_video.fallback_url : false,
+				reddit_height: entry.data.secure_media.reddit_video.height ? entry.data.secure_media.reddit_video.height : false,
+				reddit_width: entry.data.secure_media.reddit_video.width ? entry.data.secure_media.reddit_video.width : false,
 			});
 		});
 		return arrayResponse;

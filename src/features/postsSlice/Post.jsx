@@ -90,7 +90,7 @@ export const Post = ({ id }) => {
 				{post.is_gallery && (
 					<Carousel maxWidth='500px' mx={"auto"} items={post.gallery_data} />
 				)}
-				{post.is_reddit_media_domain && (
+				{post.is_reddit_media_domain && !post.reddit_video_url && (
 					<Image
 						objectFit='cover'
 						maxWidth='500px'
@@ -104,6 +104,12 @@ export const Post = ({ id }) => {
 
 					<Flex justifyContent={'center'}>
 					<iframe src={`https://www.youtube-nocookie.com/embed/${post.youtube_id_video}`} title='Youtube Video' frameborder="0" height={"315"} width={"560"} controls='2' loading="lazy"></iframe>
+					</Flex>
+				)}
+
+				{post.reddit_video_url && (
+					<Flex justifyContent={'center'}>
+					<iframe src={post.reddit_video_url} height={post.reddit_height} width={post.reddit_width} title='Reddit Video' loading="lazy"  frameborder="0" autoplay='0'></iframe>
 					</Flex>
 				)}
 				</CardBody>
