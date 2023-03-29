@@ -42,10 +42,16 @@ export const calculateTimeStamp = time => {
 
 export const Post = ({ id }) => {
 	const post = useSelector((state) => state.posts.entities[id]);
-	    const renderDate = calculateTimeStamp(post.created)
+	const renderDate = calculateTimeStamp(post.created)
+
+	const renderContent = ''
+	if (!post.is_reddit_media_domain) {
+
+	}
+
 	return (
 		<div>
-			<Card maxW='container.lg' my={"2rem"}>
+			<Card maxW='container.lg' my={"2rem"} overflow={'hidden'}>
 				<CardHeader>
 					<Flex spacing='4'>
 						<Flex flex='1' gap='4' flexWrap='wrap' flexDirection={"column"}>
@@ -77,8 +83,10 @@ export const Post = ({ id }) => {
 					</Flex>
 				</CardHeader>
 				<CardBody>
-					<Text></Text>
-				</CardBody>
+				{/* Content of post */}
+				<Text>{post.content}</Text>
+				
+				
 				{post.is_gallery && (
 					<Carousel maxWidth='500px' mx={"auto"} items={post.gallery_data} />
 				)}
@@ -92,7 +100,13 @@ export const Post = ({ id }) => {
 						alt='Chakra UI'
 					/>
 				)}
+				{!post.is_reddit_media_domain && post.youtube_id_video && (
 
+					<Flex justifyContent={'center'}>
+					<iframe src={`https://www.youtube-nocookie.com/embed/${post.youtube_id_video}`} title='Youtube Video' frameborder="0" height={"315"} width={"560"} controls='2' loading="lazy"></iframe>
+					</Flex>
+				)}
+				</CardBody>
 				<CardFooter
 					justify='space-between'
 					flexWrap='wrap'

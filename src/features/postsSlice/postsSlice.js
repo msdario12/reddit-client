@@ -13,6 +13,19 @@ export const fetchPostsFromCategory = createAsyncThunk(
 		const jsonResponse = await response.json();
 		let arrayResponse = [];
 		console.log("post", jsonResponse);
+		const getYoutubeVideoId = (url) => {
+			// Detect type of url
+			let index = ''
+			if (url.includes('youtube.com')) {
+				index = url.indexOf('?v=')
+			} else if (url.includes('youtu.be')) {
+				index = url.indexOf('be/')
+			} else {
+				return false
+			}
+			const id = url.slice(index+3,index+3+11)
+			return id;
+		}
 		jsonResponse.data.children.forEach((entry) => {
 			arrayResponse.push({
 				id: entry.data.id,
@@ -30,6 +43,7 @@ export const fetchPostsFromCategory = createAsyncThunk(
 				ups: entry.data.ups,
 				upvote_ratio: entry.data.upvote_ratio,
 				num_comments: entry.data.num_comments,
+				youtube_id_video: getYoutubeVideoId(entry.data.url),
 			});
 		});
 		return arrayResponse;
