@@ -1,4 +1,13 @@
-import { Card, CardBody, CardHeader, Heading, Text, Flex } from "@chakra-ui/react";
+import {
+	Card,
+	CardBody,
+	CardHeader,
+	Heading,
+	Text,
+	Flex,
+	Grid,
+	GridItem,
+} from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
@@ -10,23 +19,59 @@ import {
 	selectCommentById,
 } from "./commentsSlice";
 
+const CommentResponses = ({ comment }) => {
+
+	if (comment.replies.data) {
+		const replies = comment.replies.data.children;
+		const numResponses = replies.length;
+		let render = [];
+		let i = 0
+		for (const reply of replies) {
+			const renderDate = calculateTimeStamp(reply.data.created);
+			i = i+1
+			render.push(
+				<GridItem colStart={i+1} colEnd={numResponses+5}>
+					<Card my={2} bg='blackAlpha.300'>
+						<CardHeader>
+							<Flex gap={2} flexWrap={'wrap'}>
+								<Heading size={"sm"}>{i}-by {reply.data.author}</Heading>
+								<Text> {renderDate}</Text>
+							</Flex>
+						</CardHeader>
+						<CardBody>
+							<Text>{reply.data.body}</Text>
+						</CardBody>
+					</Card>
+				</GridItem>
+			);
+		}
+		return (<Grid templateColumns={`repeat(${numResponses+4}, 0.5fr)`} gap={2} width={'100%'}>
+		{render}
+		</Grid>);
+	}
+};
 
 const SingleComment = ({ commentId }) => {
-
 	const comment = useSelector((state) => selectCommentById(state, commentId));
-	const renderDate = calculateTimeStamp(comment.created)
+	const renderDate = calculateTimeStamp(comment.created);
 	return (
+		<>
 			<Card my={3}>
-                <CardHeader>
-                    <Flex gap={3}>
-						<Heading size={'sm'}>by {comment.author}</Heading>
-											<Text> {renderDate}</Text>
+				<CardHeader>
+					<Flex gap={3}>
+						<Heading size={"sm"}>by {comment.author}</Heading>
+						<Text> {renderDate}</Text>
 					</Flex>
-                </CardHeader>
+				</CardHeader>
 				<CardBody>
 					<Text>{comment.body}</Text>
 				</CardBody>
 			</Card>
+
+
+			{comment.replies && <CommentResponses comment={comment} />}
+
+		</>
 	);
 };
 
@@ -51,7 +96,7 @@ export const CommentList = ({ permalink }) => {
 	// 	}
 	// }, [permalink]);
 
-	if (statusComment === "loading" || statusComment === 'iddle') {
+	if (statusComment === "loading" || statusComment === "iddle") {
 		return "Loading";
 	}
 
@@ -64,8 +109,7 @@ export const CommentList = ({ permalink }) => {
 
 // Fetch comments
 export const LoaderComments = async (id) => {
-	const dispatch = useDispatch()
-	const response = await dispatch(fetchCommentsFromPost(id)).unwrap()
-	return response.json
-
-}
+	const dispatch = useDispatch();
+	const response = await dispatch(fetchCommentsFromPost(id)).unwrap();
+	return response.json;
+};
