@@ -1,37 +1,44 @@
 import "./App.css";
-import { Header } from "./components/Header";
-import { CategoriesTab } from "./features/categoriesSlice/CategoriesTab";
-import { fetchCategories } from "./features/categoriesSlice/categoriesSlice";
-import { useDispatch } from "react-redux";
-import { Link, Outlet } from "react-router-dom";
-import { fetchPostsFromCategory } from "./features/postsSlice/postsSlice";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { CardsList } from './components/CardsList';
+import { SinglePost } from './features/postsSlice/SinglePost';
+import RootLayout from "./layouts/RootLayout";
+import store from "./app/store";
+import { fetchCommentsFromPost } from './features/commentsSlice/commentsSlice';
+import { useSelector } from 'react-redux';
+import { fetchPostsFromCategory } from './features/postsSlice/postsSlice';
+
+
+const router = createBrowserRouter([
+	{
+		path: "/",
+		element: <RootLayout />,
+		// errorElement: <ErrorPage />,
+		children: [
+			{
+				path: "r/:categoryId",
+				element: <CardsList />,
+				loader: ({ params }) => {
+					store.dispatch(fetchPostsFromCategory(`/r/${params.categoryId}`))
+					return params.categoryId;
+				},
+			},
+			{
+				path: "r/:categoryId/comments/:postId/:postTitle",
+				element: <SinglePost />,
+				loader: ({ params }) => {
+					store.dispatch(fetchCommentsFromPost(`/r/${params.categoryId}/comments/${params.postId}/${params.postTitle}`))
+					store.dispatch(fetchPostsFromCategory(`/r/${params.categoryId}`))
+					return params.postId;
+				},
+			},
+		],
+	},
+]);
 
 function App() {
-
-  const dispatch = useDispatch()
-
-
   return (
-    <div>
-      <nav>
-        <ul>
-          <li>
-            <Link to={'post/1'}>Ir a post 1</Link>
-          </li>
-        </ul>
-      </nav>
-      <Header/>
-      <CategoriesTab />
-
-      <button onClick={() => dispatch(fetchPostsFromCategory('/r/redditdev'))}>FETCH POSTS</button>
-      <div>
-        <h3>Aca va un post</h3>
-        <div>
-          <Outlet />
-        </div>
-      </div>
-    </div>
-
+    <RouterProvider router={router} />
   );
 }
 

@@ -17,6 +17,8 @@ export const CardsList = () => {
 		}
 	}, [categoryId, dispatch]);
 
+	console.log('fromCardList', categoryId)
+
 	if (statusPost === "loading") {
 		return "Loading";
 	}
@@ -24,7 +26,7 @@ export const CardsList = () => {
 	return (
 		<div>
 			{postsIds.map((postId) => (
-				<Post id={postId} />
+				<Post key={postId} id={postId} />
 			))}
 		</div>
 	);
