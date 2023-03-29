@@ -11,7 +11,7 @@ export default function RootLayout() {
 	const dispatch = useDispatch();
 	return (
 		<div>
-			<Box as='nav' position={"sticky"}>
+			<Box as='nav' pb={20}>
 				<Header />
 			</Box>
 
@@ -23,7 +23,9 @@ export default function RootLayout() {
 					bg='purple.400'
 					minHeight={{ lg: "100vh" }}
 					p={{ base: "20px", lg: "30px" }}>
-					<CategoriesTab />
+					<Box >
+						<CategoriesTab />
+					</Box>
 				</GridItem>
 
 				{/* main content & navbar */}

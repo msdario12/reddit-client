@@ -23,8 +23,10 @@ export const Header = () => {
         px={{ base: 2, sm: 4 }}
         py={4}
         shadow="md"
+		position={'fixed'}
+		zIndex={2}
       >
-        <Flex alignItems="center" justifyContent="space-between" mx="auto">
+        <Flex alignItems="center" justifyContent="space-between" mx="auto" >
           <Flex>
             <chakra.a
               href="/"
