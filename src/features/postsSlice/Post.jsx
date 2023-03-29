@@ -16,31 +16,33 @@ import {
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Carousel from "../../components/Carousel";
-import { selectAllPostsIds, selectPostById } from "./postsSlice";
+
+export const calculateTimeStamp = time => {
+	// Define time of post
+	const createDatePost = new Date(time*1000);
+	const actualTimestamp = new Date();
+	const timestamp = actualTimestamp.getTime() - createDatePost.getTime();
+
+	// Trabajamos con las fechas
+	const minutes = Math.round(timestamp / 1000 / 60)
+	const hours = Math.round(minutes / 60)
+	const days = Math.round(hours / 24)
+	// const date = new Date(timestamp).toString();
+
+	if (minutes <= 60) {
+		return minutes + ' mins ago'
+	} else if (minutes <= 3600) {
+		return hours + ' hours ago'
+	} else {
+		return days + ' days ago'
+	}
+
+	
+}
 
 export const Post = ({ id }) => {
 	const post = useSelector((state) => state.posts.entities[id]);
-	    // Define timestamp of post
-		const createDatePost = new Date(post.created*1000);
-		const actualTimestamp = new Date();
-		const timestamp = actualTimestamp.getTime() - createDatePost.getTime();
-
-		// Trabajamos con las fechas
-		const minutes = Math.round(timestamp / 1000 / 60)
-		const hours = Math.round(minutes / 60)
-		const days = Math.round(hours / 24)
-		// const date = new Date(timestamp).toString();
-		const date = minutes
-		const renderDate = (minutes) => {
-			if (minutes <= 60) {
-				return minutes + ' mins ago'
-			} else if (minutes <= 3600) {
-				return hours + ' hours ago'
-			} else {
-				return days + ' days ago'
-			}
-
-		}
+	    const renderDate = calculateTimeStamp(post.created)
 	return (
 		<div>
 			<Card maxW='container.lg' my={"2rem"}>
@@ -59,7 +61,7 @@ export const Post = ({ id }) => {
 								</Flex>
 								<Box>
 									<Heading size='sm'>
-										by {post.author} - {renderDate(minutes)}
+										by {post.author} - {renderDate}
 									</Heading>
 								</Box>
 							</Flex>

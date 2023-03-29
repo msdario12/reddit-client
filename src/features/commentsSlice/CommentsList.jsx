@@ -1,7 +1,8 @@
-import { Card, CardBody, CardHeader, Heading, Text } from "@chakra-ui/react";
+import { Card, CardBody, CardHeader, Heading, Text, Flex } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { calculateTimeStamp } from "../postsSlice/Post";
 import {
 	fetchCommentsFromPost,
 	selectAllComments,
@@ -9,14 +10,18 @@ import {
 	selectCommentById,
 } from "./commentsSlice";
 
+
 const SingleComment = ({ commentId }) => {
 
 	const comment = useSelector((state) => selectCommentById(state, commentId));
-
+	const renderDate = calculateTimeStamp(comment.created)
 	return (
 			<Card my={3}>
                 <CardHeader>
-                    <Heading size={'sm'}>by {comment.author}</Heading>
+                    <Flex gap={3}>
+						<Heading size={'sm'}>by {comment.author}</Heading>
+											<Text> {renderDate}</Text>
+					</Flex>
                 </CardHeader>
 				<CardBody>
 					<Text>{comment.body}</Text>
