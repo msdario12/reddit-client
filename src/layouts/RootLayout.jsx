@@ -1,4 +1,4 @@
-import { Grid, GridItem } from "@chakra-ui/react";
+import { Box, Grid, GridItem } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 
 // components
@@ -11,11 +11,10 @@ export default function RootLayout() {
 	const dispatch = useDispatch();
 	return (
 		<div>
-			<div>
-				<nav>
-					<Header />
-				</nav>
-			</div>
+			<Box as='nav' position={"sticky"}>
+				<Header />
+			</Box>
+
 			<Grid templateColumns='repeat(8, 1fr)' bg='gray.50'>
 				{/* sidebar */}
 				<GridItem
@@ -28,7 +27,11 @@ export default function RootLayout() {
 				</GridItem>
 
 				{/* main content & navbar */}
-				<GridItem as='main' colSpan={{ base: 8, lg: 6, xl: 3 }} colStart= {{base: 1 , xl: 4}} p='20px'>
+				<GridItem
+					as='main'
+					colSpan={{ base: 8, lg: 6, xl: 3 }}
+					colStart={{ base: 1, xl: 4 }}
+					p='20px'>
 					<Outlet />
 				</GridItem>
 			</Grid>
