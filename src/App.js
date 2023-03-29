@@ -16,6 +16,15 @@ const router = createBrowserRouter([
 		// errorElement: <ErrorPage />,
 		children: [
 			{
+				path: "/",
+				element: <CardsList />,
+				loader: () => {
+					store.dispatch(fetchPostsFromCategory(`/r/Home`))
+					return null
+				},
+
+			},
+			{
 				path: "r/:categoryId",
 				element: <CardsList />,
 				loader: ({ params }) => {

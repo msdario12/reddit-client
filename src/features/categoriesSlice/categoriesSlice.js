@@ -8,7 +8,7 @@ import { fetchPostsFromCategory } from "../postsSlice/postsSlice";
 // Create thunk for fetch categories (subreddits)
 export const fetchCategories = createAsyncThunk(
 	"categories/fetchCategories",
-	async () => {
+	async (categoryId, {getState, dispatch}) => {
 		const response = await fetch("https://www.reddit.com/subreddits.json");
 		const jsonResponse = await response.json();
 		let arrayResponse = [];
@@ -20,6 +20,8 @@ export const fetchCategories = createAsyncThunk(
 				url: entry.data.url,
 			});
 		});
+		// const url = categoryId ? categoryId : 'r/Home'
+		// dispatch(fetchPostsFromCategory(url))
 		return arrayResponse;
 	}
 );
@@ -51,8 +53,6 @@ const categoriesAdapter = createEntityAdapter();
 const initialState = categoriesAdapter.getInitialState({
 	status: 'idle',
 	error: null,
-	urlToRender: '/r/Home/',
-	postsIds: [],
 });
 
 const categoriesSlice = createSlice({
