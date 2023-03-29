@@ -29,23 +29,26 @@ const CommentResponses = ({ comment }) => {
 		for (const reply of replies) {
 			const renderDate = calculateTimeStamp(reply.data.created);
 			i = i+1
-			render.push(
-				<GridItem colStart={i+1} colEnd={numResponses+5}>
-					<Card my={2} bg='blackAlpha.300'>
-						<CardHeader>
-							<Flex gap={2} flexWrap={'wrap'}>
-								<Heading size={"sm"}>{i}-by {reply.data.author}</Heading>
-								<Text> {renderDate}</Text>
-							</Flex>
-						</CardHeader>
-						<CardBody>
-							<Text>{reply.data.body}</Text>
-						</CardBody>
-					</Card>
-				</GridItem>
-			);
+			if (reply.data.body) {
+				render.push(
+					<GridItem colStart={i+1} colEnd={numResponses+15}>
+						<Card my={2} bg='blackAlpha.300'>
+							<CardHeader>
+								<Flex gap={2} flexWrap={'wrap'}>
+									<Heading size={"sm"}>{i}-by {reply.data.author}</Heading>
+									<Text> {renderDate}</Text>
+								</Flex>
+							</CardHeader>
+							<CardBody>
+								<Text>{reply.data.body}</Text>
+							</CardBody>
+						</Card>
+					</GridItem>
+				);
+			}
+			
 		}
-		return (<Grid templateColumns={`repeat(${numResponses+4}, 0.5fr)`} gap={2} width={'100%'}>
+		return (<Grid templateColumns={`repeat(${numResponses+14}, 0.5fr)`} gap={2} width={'100%'}>
 		{render}
 		</Grid>);
 	}

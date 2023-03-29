@@ -31,7 +31,7 @@ export const calculateTimeStamp = time => {
 
 	if (minutes <= 60) {
 		return minutes + ' mins ago'
-	} else if (minutes <= 3600) {
+	} else if (hours <= 24) {
 		return hours + ' hours ago'
 	} else {
 		return days + ' days ago'
