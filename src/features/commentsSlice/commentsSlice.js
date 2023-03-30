@@ -3,6 +3,7 @@ import {
 	createEntityAdapter,
 	createSlice,
 } from "@reduxjs/toolkit";
+import { fetchAuthorsFromName } from "../authorsSlice/authorsSlice";
 
 // Fetch post from a determined category
 export const fetchCommentsFromPost = createAsyncThunk(
@@ -23,6 +24,7 @@ export const fetchCommentsFromPost = createAsyncThunk(
 				ups: entry.data.ups,
 				data: entry.data ? entry.data : false,
 			});
+			thunkObj.dispatch(fetchAuthorsFromName(entry.data.author))
 		});
 		return arrayResponse;
 	}
@@ -33,6 +35,7 @@ const commentsAdapter = createEntityAdapter();
 const initialState = commentsAdapter.getInitialState({
 	status: "iddle",
 	error: null,
+	authors: [],
 });
 
 const commentsSlice = createSlice({
@@ -43,6 +46,7 @@ const commentsSlice = createSlice({
 		builder
 			.addCase(fetchCommentsFromPost.fulfilled, (state, action) => {
 				commentsAdapter.setAll(state, action.payload);
+				state.authors = action.payload.map(obj => obj.author);
 				state.status = "succeeded";
 				state.error = null;
 			})
