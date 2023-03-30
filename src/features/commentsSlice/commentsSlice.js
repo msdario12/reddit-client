@@ -21,7 +21,7 @@ export const fetchCommentsFromPost = createAsyncThunk(
 				body_html: entry.data.body_html,
 				created: entry.data.created,
 				ups: entry.data.ups,
-				replies: entry.data.replies ? entry.data.replies : false,
+				data: entry.data ? entry.data : false,
 			});
 		});
 		return arrayResponse;

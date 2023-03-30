@@ -18,39 +18,106 @@ import {
 	selectAllCommentsIds,
 	selectCommentById,
 } from "./commentsSlice";
+// Determinar cuantas respuestas anidadas existen
+
+function getNestedReplies(comment) {
+	const replies = [comment];
+	if (
+		comment.data &&
+		comment.data.replies &&
+		comment.data.replies.data &&
+		comment.data.replies.data.children
+	) {
+		comment.data.replies.data.children.forEach((reply) => {
+			const nestedReplies = getNestedReplies(reply);
+			if (nestedReplies.length) {
+				replies.push(...nestedReplies);
+			}
+		});
+	}
+	return replies;
+}
+
+function cleanArray(array) {
+	const cleanArray = [];
+	array.forEach((reply) => {
+		if (reply.data) {
+			cleanArray.push({
+				body: reply.data.body ? reply.data.body : reply.data.count ,
+				id: reply.data.id ? reply.data.id : false,
+				author: reply.data.author ? reply.data.author : false,
+				created: reply.data.created ? reply.data.created : false,
+				ups: reply.data.ups ? reply.data.ups : false,
+			});
+		}
+	});
+	cleanArray.shift()
+	return cleanArray;
+}
 
 const CommentResponses = ({ comment }) => {
-
-	if (comment.replies.data) {
-		const replies = comment.replies.data.children;
+	if (comment.data.replies) {
+		const replies = comment.data.replies.data.children;
+		const nestedReplies = getNestedReplies(comment);
+		console.log("nested", nestedReplies);
+		const clean = cleanArray(nestedReplies);
+		console.log("clean", clean);
 		const numResponses = replies.length;
 		let render = [];
-		let i = 0
-		for (const reply of replies) {
-			const renderDate = calculateTimeStamp(reply.data.created);
-			i = i+1
-			if (reply.data.body) {
+		let i = 0;
+		let count
+		for (const reply of clean) {
+			const renderDate = calculateTimeStamp(reply.created);
+			i = typeof reply.body === 'number' ? i - 1 : i + 1;
+			count = i
+			if (reply.id) {
 				render.push(
-					<GridItem colStart={i+1} colEnd={numResponses+15}>
-						<Card my={2} bg='blackAlpha.300'>
+					<GridItem
+						key={reply.created}
+						colStart={ i }
+						colEnd={count + 80}>
+						<Card key={reply.created} my={2} bg='blackAlpha.300'>
 							<CardHeader>
-								<Flex gap={2} flexWrap={'wrap'}>
-									<Heading size={"sm"}>{i}-by {reply.data.author}</Heading>
+								<Flex gap={2} flexWrap={"wrap"}>
+									<Heading size={"sm"}>
+										{i}-by {reply.author}
+									</Heading>
 									<Text> {renderDate}</Text>
 								</Flex>
 							</CardHeader>
 							<CardBody>
-								<Text>{reply.data.body}</Text>
+								<Text>{reply.body}</Text>
+								{/* <Text>{nestedReplies} respuestas</Text> */}
 							</CardBody>
 						</Card>
 					</GridItem>
 				);
 			}
-			
+			if (!reply.created) {
+				render.push(
+					<GridItem
+						key={reply.created}
+						colStart={ i }
+						colEnd={count + 20}
+						>
+						<Card key={reply.created} my={1} bg='blue.300'>
+							<CardBody>
+								<Text>Show more {reply.body}</Text>
+							</CardBody>
+						</Card>
+					</GridItem>
+				);
+			}
 		}
-		return (<Grid templateColumns={`repeat(${numResponses+14}, 0.5fr)`} gap={2} width={'100%'}>
-		{render}
-		</Grid>);
+		return (
+			<Grid
+				templateColumns={`repeat(${count+20}, 1fr)`}
+				gap={2}
+				width={"100%"}
+				key={replies.id}>
+				{render}
+			</Grid>
+		);
 	}
 };
 
@@ -59,7 +126,7 @@ const SingleComment = ({ commentId }) => {
 	const renderDate = calculateTimeStamp(comment.created);
 	return (
 		<>
-			<Card my={3}>
+			<Card my={3} key={commentId}>
 				<CardHeader>
 					<Flex gap={3}>
 						<Heading size={"sm"}>by {comment.author}</Heading>
@@ -71,9 +138,7 @@ const SingleComment = ({ commentId }) => {
 				</CardBody>
 			</Card>
 
-
-			{comment.replies && <CommentResponses comment={comment} />}
-
+			{comment.data && <CommentResponses comment={comment} />}
 		</>
 	);
 };
