@@ -15,17 +15,17 @@ export const fetchPostsFromCategory = createAsyncThunk(
 		console.log("post", jsonResponse);
 		const getYoutubeVideoId = (url) => {
 			// Detect type of url
-			let index = ''
-			if (url.includes('youtube.com')) {
-				index = url.indexOf('?v=')
-			} else if (url.includes('youtu.be')) {
-				index = url.indexOf('be/')
+			let index = "";
+			if (url.includes("youtube.com")) {
+				index = url.indexOf("?v=");
+			} else if (url.includes("youtu.be")) {
+				index = url.indexOf("be/");
 			} else {
-				return false
+				return false;
 			}
-			const id = url.slice(index+3,index+3+11)
+			const id = url.slice(index + 3, index + 3 + 11);
 			return id;
-		}
+		};
 
 		jsonResponse.data.children.forEach((entry) => {
 			arrayResponse.push({
@@ -45,9 +45,17 @@ export const fetchPostsFromCategory = createAsyncThunk(
 				upvote_ratio: entry.data.upvote_ratio,
 				num_comments: entry.data.num_comments,
 				youtube_id_video: getYoutubeVideoId(entry.data.url),
-				reddit_video_url: entry.data.secure_media ? entry.data.secure_media.reddit_video.fallback_url : false,
-				reddit_height: entry.data.secure_media ? entry.data.secure_media.reddit_video.height : false,
-				reddit_width: entry.data.secure_media ? entry.data.secure_media.reddit_video.width : false,
+				reddit_video_url:
+					entry.data.secure_media &&
+					entry.data.secure_media.reddit_video ? entry.data.secure_media.reddit_video.fallback_url : false,
+				reddit_height: entry.data.secure_media &&
+					entry.data.secure_media.reddit_video ?
+					entry.data.secure_media.reddit_video.height
+					: false,
+				reddit_width: entry.data.secure_media &&
+				entry.data.secure_media.reddit_video ?
+				entry.data.secure_media.reddit_video.width
+				: false,
 			});
 		});
 		return arrayResponse;
