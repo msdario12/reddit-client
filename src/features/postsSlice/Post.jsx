@@ -40,13 +40,20 @@ export const calculateTimeStamp = time => {
 	
 }
 
-export const Post = ({ id }) => {
+export const Post = ({ id, verticalWrap }) => {
 	const post = useSelector((state) => state.posts.entities[id]);
 	const renderDate = calculateTimeStamp(post.created)
 
 	const renderContent = ''
 	if (!post.is_reddit_media_domain) {
 
+	}
+
+	const renderTextBody = () => {
+		if (verticalWrap) {
+			return post.content.substring(0,340)+'...'
+		}
+		return post.content
 	}
 
 	return (
@@ -84,7 +91,7 @@ export const Post = ({ id }) => {
 				</CardHeader>
 				<CardBody>
 				{/* Content of post */}
-				<Text>{post.content}</Text>
+				<Text>{renderTextBody()}</Text>
 				
 				
 				{post.is_gallery && (

@@ -38,7 +38,7 @@ const ExcerptSinglePost = () => {
 
 	return (
 		<>
-			<Post id={postId} />
+			<Post id={postId} verticalWrap={false}/>
 			{/* <CommentList permalink={post.permalink} /> */}
 			<CommentListNew commentsIds={commentsIds} />
 		</>

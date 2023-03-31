@@ -26,7 +26,7 @@ export const CardsList = () => {
 	return (
 		<div>
 			{postsIds.map((postId) => (
-				<Post key={postId} id={postId} />
+				<Post verticalWrap={true} key={postId} id={postId} />
 			))}
 		</div>
 	);
