@@ -29,7 +29,7 @@ const ExcerptSinglePost = () => {
 	const postId = useLoaderData();
 	const post = useSelector((state) => selectPostById(state, postId));
 	// Comments selectors
-	const commentsIds = useSelector(selectAllCommentsIds)
+	const commentsIds = useSelector(selectAllCommentsIds);
 	// Fetch author for every comment author (and reply also)
 
 	if (!post) {
@@ -38,13 +38,12 @@ const ExcerptSinglePost = () => {
 
 	return (
 		<>
-			<Post id={postId} verticalWrap={false}/>
+			<Post id={postId} verticalWrap={false} />
 			{/* <CommentList permalink={post.permalink} /> */}
 			<CommentListNew commentsIds={commentsIds} />
 		</>
 	);
 };
-
 
 export const SinglePost = () => {
 	// Post things

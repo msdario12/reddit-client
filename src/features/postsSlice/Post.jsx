@@ -16,6 +16,7 @@ import {
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Carousel from "../../components/Carousel";
+import { UpsCounter } from "../../components/UpsCounter";
 
 export const calculateTimeStamp = (time) => {
 	// Define time of post
@@ -60,15 +61,7 @@ export const Post = ({ id, verticalWrap }) => {
 					<Flex spacing='4'>
 						<Flex flex='1' gap='4' flexWrap='wrap' flexDirection={"column"}>
 							<Flex gap={4}>
-								<Flex
-									flexDirection={"column"}
-									alignContent='center'
-									justifyContent={"center"}
-									gap='1'>
-									<TriangleUpIcon />
-									<Text textAlign={"center"}>{post.ups}</Text>
-									<TriangleDownIcon />
-								</Flex>
+								<UpsCounter ups={post.ups} />
 								<Box>
 									<Heading size='sm'>
 										by {post.author} - {renderDate}

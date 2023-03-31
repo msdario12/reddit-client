@@ -18,6 +18,7 @@ import {
 import { Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { UpsCounter } from "../../components/UpsCounter";
 import {
 	fetchAuthorsFromName,
 	selectAllAuthorsIds,
@@ -75,6 +76,7 @@ const SingleComment = ({ comment, author }) => {
 					<Card my={3} key={comment.id}>
 						<CardHeader>
 							<Flex gap={3}>
+								<UpsCounter ups={comment.ups} />
 								<Avatar name={author} src={avatar} />
 								<Heading size={"sm"}>by {comment.author}</Heading>
 								<Text> {renderDate}</Text>
