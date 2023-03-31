@@ -13,10 +13,12 @@ import {
 	Text,
 	IconButton,
 } from "@chakra-ui/react";
-import { useSelector } from "react-redux";
+import { connect, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import Carousel from "../../components/Carousel";
+import { HtmlParser } from "../../components/HtmlParse";
 import { UpsCounter } from "../../components/UpsCounter";
+import './Post.css'
 
 export const calculateTimeStamp = (time) => {
 	// Define time of post
@@ -42,16 +44,16 @@ export const calculateTimeStamp = (time) => {
 export const Post = ({ id, verticalWrap }) => {
 	const post = useSelector((state) => state.posts.entities[id]);
 	const renderDate = calculateTimeStamp(post.created);
-
+	const content = post.content ? <HtmlParser content={post.content}/> : ''
 	const renderContent = "";
 	if (!post.is_reddit_media_domain) {
 	}
 
 	const renderTextBody = () => {
 		if (verticalWrap) {
-			return post.content.substring(0, 340) + "...";
+			return post.content_text.substring(0, 340) + "...";
 		}
-		return post.content;
+		return content;
 	};
 
 	return (
@@ -83,7 +85,7 @@ export const Post = ({ id, verticalWrap }) => {
 				<CardBody>
 					<Link to={post.permalink}>
 						{/* Content of post */}
-						<Text>{renderTextBody()}</Text>
+						{renderTextBody()}
 
 						{post.is_reddit_media_domain && !post.reddit_video_url && (
 							<Image

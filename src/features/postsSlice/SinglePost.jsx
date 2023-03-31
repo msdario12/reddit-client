@@ -1,25 +1,6 @@
 import { Link, useLoaderData } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectPostById } from "./postsSlice";
-import { ChatIcon, TriangleDownIcon, TriangleUpIcon } from "@chakra-ui/icons";
-import {
-	Card,
-	CardHeader,
-	Image,
-	CardFooter,
-	CardBody,
-	Button,
-	Flex,
-	Box,
-	Heading,
-	Text,
-	IconButton,
-} from "@chakra-ui/react";
-import Carousel from "../../components/Carousel";
-import { CommentList } from "../commentsSlice/CommentsList";
-import { useEffect } from "react";
-import { fetchPostsFromCategory } from "../postsSlice/postsSlice";
-import { useDispatch } from "react-redux";
 import { Post } from "./Post";
 import { CommentListNew } from "../commentsSlice/CommentListNew";
 import { selectAllCommentsIds } from "../commentsSlice/commentsSlice";
