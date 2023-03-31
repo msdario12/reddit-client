@@ -31,7 +31,7 @@ export const fetchCommentsFromPost = createAsyncThunk(
 					: false,
 				author_flair_background_color: entry.data.author_flair_background_color
 					? entry.data.author_flair_background_color
-					: false,
+					: "teal",
 				author_flair_text_color: entry.data.author_flair_text_color
 					? entry.data.author_flair_text_color
 					: false,

@@ -57,13 +57,19 @@ const RepliesComment = ({ reply }) => {
 								<Text>{renderDate}</Text>
 							</Flex>
 							<Box>
-								<Tag
-									size={"md"}
-									variant='solid'
-									bg={reply.author_flair_background_color}
-									mt='5px'>
-									{reply.author_flair_text}
-								</Tag>
+								{reply.author_flair_text && (
+									<Tag
+										size={"md"}
+										variant='solid'
+										bg={
+											reply.author_flair_background_color === "transparent"
+												? "teal"
+												: reply.author_flair_background_color
+										}
+										mt='5px'>
+										{reply.author_flair_text}
+									</Tag>
+								)}
 							</Box>
 						</Flex>
 					</Flex>
@@ -101,13 +107,20 @@ const SingleComment = ({ comment, author }) => {
 										<Text>{renderDate}</Text>
 									</Flex>
 									<Box>
-										<Tag
-											size={"md"}
-											variant='solid'
-											bg={comment.author_flair_background_color}
-											mt='5px'>
-											{comment.author_flair_text}
-										</Tag>
+										{comment.author_flair_text && (
+											<Tag
+												size={"md"}
+												variant='solid'
+												bg={
+													comment.author_flair_background_color ===
+													"transparent"
+														? "teal"
+														: comment.author_flair_background_color
+												}
+												mt='5px'>
+												{comment.author_flair_text}
+											</Tag>
+										)}
 									</Box>
 								</Flex>
 							</Flex>
