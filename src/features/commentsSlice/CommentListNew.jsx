@@ -15,7 +15,7 @@ import {
 	AccordionIcon,
 	Box,
 } from "@chakra-ui/react";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
 import {
@@ -44,18 +44,18 @@ const RepliesComment = ({ reply }) => {
 		return <Text>{reply.body}</Text>;
 	} else if (avatar) {
 		return (
-				<Card my={3} key={reply.id} bg='blackAlpha.100'>
-					<CardHeader>
-						<Flex gap={3}>
-							<Avatar name={reply.author} src={avatar.img} />
-							<Heading size={"sm"}>by {reply.author}</Heading>
-							<Text> {renderDate}</Text>
-						</Flex>
-					</CardHeader>
-					<CardBody>
-						<Text>{reply.body}</Text>
-					</CardBody>
-				</Card>
+			<Card my={3} key={reply.id} bg='blackAlpha.100'>
+				<CardHeader>
+					<Flex gap={3}>
+						<Avatar name={reply.author} src={avatar.img} />
+						<Heading size={"sm"}>by {reply.author}</Heading>
+						<Text> {renderDate}</Text>
+					</Flex>
+				</CardHeader>
+				<CardBody>
+					<Text>{reply.body}</Text>
+				</CardBody>
+			</Card>
 		);
 	}
 };
@@ -66,7 +66,7 @@ const SingleComment = ({ comment, author }) => {
 	// Calculate timestamp of comment
 	const renderDate = calculateTimeStamp(comment.created);
 	// Get number of replies of each comment
-	const numberReplies = comment.replies.length
+	const numberReplies = comment.replies.length;
 
 	return (
 		<div>
@@ -84,25 +84,26 @@ const SingleComment = ({ comment, author }) => {
 							<Text>{comment.body}</Text>
 						</CardBody>
 						<h2>
-						{numberReplies > 0 ? (
-							<AccordionButton>
-								<Box as='span' flex='1' textAlign='left'>
-									{numberReplies + ' Replies'}
-								</Box>
-								<AccordionIcon />
-							</AccordionButton>
-						) : <></>}
-							
+							{numberReplies > 0 ? (
+								<AccordionButton>
+									<Box as='span' flex='1' textAlign='left'>
+										{numberReplies + " Replies"}
+									</Box>
+									<AccordionIcon />
+								</AccordionButton>
+							) : (
+								<></>
+							)}
 						</h2>
 					</Card>
 
 					<AccordionPanel pb={4}>
-							{comment.replies.map(
-								(reply) =>
-									reply.body.length > 2 && (
-										<RepliesComment key={reply.id} reply={reply} />
-									)
-							)}
+						{comment.replies.map(
+							(reply) =>
+								reply.body.length > 2 && (
+									<RepliesComment key={reply.id} reply={reply} />
+								)
+						)}
 					</AccordionPanel>
 				</AccordionItem>
 			</Accordion>
@@ -125,13 +126,12 @@ const CommentLoader = ({ commentId }) => {
 	// 	}
 	// }, [author]);
 	// Check if the fetch of author data is complete, else return a loading component
-	if (authorsStatus === "loading") {
-		// Loading page
-		return "Cargando author avatar";
-	} else if (authorsStatus === "succeeded") {
-		// Return actual component to render
-		return <SingleComment comment={comment} author={author} />;
-	}
+
+	return (
+		<Suspense key={commentId} fallback={"Loading suspense..."}>
+			<SingleComment comment={comment} author={author} />
+		</Suspense>
+	);
 };
 
 export const CommentListNew = ({ commentsIds }) => {

@@ -2,7 +2,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { Post } from "../features/postsSlice/Post";
 import { selectAllPostsIds } from "../features/postsSlice/postsSlice";
 import { useLoaderData } from "react-router-dom";
-import { useEffect } from "react";
+import { Suspense, useEffect } from "react";
 import { fetchPostsFromCategory } from "../features/postsSlice/postsSlice";
 
 export const CardsList = () => {
@@ -26,7 +26,9 @@ export const CardsList = () => {
 	return (
 		<div>
 			{postsIds.map((postId) => (
+				<Suspense fallback={'Loading suspense posts...'}>
 				<Post verticalWrap={true} key={postId} id={postId} />
+				</Suspense>
 			))}
 		</div>
 	);
