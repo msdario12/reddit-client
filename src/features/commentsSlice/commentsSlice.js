@@ -43,9 +43,9 @@ export const fetchCommentsFromPost = createAsyncThunk(
 			arrayResponse.push({ ...obj, replies: cleanReplies });
 		});
 		// Concat array of authors of comments and replies of that comment
-		const arrayFullAuthors = [...arrayAuthors, ...arrayClean]
+		const arrayFullAuthors = [...arrayAuthors, ...arrayClean];
 		// Eliminate duplicated values using set
-		const uniqueAuthors = [...new Set(arrayFullAuthors)]
+		const uniqueAuthors = [...new Set(arrayFullAuthors)];
 		// Dispatch a fetch based in a array compose with comments and replies authors
 		thunkObj.dispatch(fetchAuthorsFromName(uniqueAuthors));
 

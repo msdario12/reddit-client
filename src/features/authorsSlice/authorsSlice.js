@@ -40,8 +40,8 @@ export const fetchAuthorsFromName = createAsyncThunk(
 			.map((result) => result.value);
 
 		// return successfulResults;
-		
-		successfulResults.map((obj) =>{
+
+		successfulResults.map((obj) => {
 			if (obj.data.data) {
 				output.push({
 					id: obj.data.data.name,
@@ -53,10 +53,9 @@ export const fetchAuthorsFromName = createAsyncThunk(
 					img: obj.data.data.snoovatar_img
 						? obj.data.data.snoovatar_img
 						: parseImg(obj.data.data.icon_img),
-				})
+				});
 			}
-			}
-		);
+		});
 		return output;
 	}
 );

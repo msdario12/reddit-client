@@ -23,7 +23,7 @@ export default function RootLayout() {
 					bg='purple.400'
 					minHeight={{ lg: "100vh" }}
 					p={{ base: "20px", lg: "30px" }}>
-					<Box >
+					<Box>
 						<CategoriesTab />
 					</Box>
 				</GridItem>
