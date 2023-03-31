@@ -18,7 +18,7 @@ import { Link } from "react-router-dom";
 import Carousel from "../../components/Carousel";
 import { HtmlParser } from "../../components/HtmlParse";
 import { UpsCounter } from "../../components/UpsCounter";
-import './Post.css'
+import "./Post.css";
 
 export const calculateTimeStamp = (time) => {
 	// Define time of post
@@ -44,7 +44,7 @@ export const calculateTimeStamp = (time) => {
 export const Post = ({ id, verticalWrap }) => {
 	const post = useSelector((state) => state.posts.entities[id]);
 	const renderDate = calculateTimeStamp(post.created);
-	const content = post.content ? <HtmlParser content={post.content}/> : ''
+	const content = post.content ? <HtmlParser content={post.content} /> : "";
 	const renderContent = "";
 	if (!post.is_reddit_media_domain) {
 	}

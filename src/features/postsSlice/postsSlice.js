@@ -33,6 +33,15 @@ export const fetchPostsFromCategory = createAsyncThunk(
 				author: entry.data.author,
 				url: entry.data.subreddit_name_prefixed,
 				title: entry.data.title,
+				link_flair_text: entry.data.link_flair_text
+					? entry.data.link_flair_text
+					: false,
+				link_flair_background_color: entry.link_flair_background_color
+					? entry.link_flair_background_color
+					: false,
+				author_flair_text_color: entry.author_flair_text_color
+					? entry.author_flair_text_color
+					: false,
 				content: entry.data.selftext_html,
 				content_text: entry.data.selftext,
 				img: entry.data.url,
@@ -47,16 +56,17 @@ export const fetchPostsFromCategory = createAsyncThunk(
 				num_comments: entry.data.num_comments,
 				youtube_id_video: getYoutubeVideoId(entry.data.url),
 				reddit_video_url:
-					entry.data.secure_media &&
-					entry.data.secure_media.reddit_video ? entry.data.secure_media.reddit_video.fallback_url : false,
-				reddit_height: entry.data.secure_media &&
-					entry.data.secure_media.reddit_video ?
-					entry.data.secure_media.reddit_video.height
-					: false,
-				reddit_width: entry.data.secure_media &&
-				entry.data.secure_media.reddit_video ?
-				entry.data.secure_media.reddit_video.width
-				: false,
+					entry.data.secure_media && entry.data.secure_media.reddit_video
+						? entry.data.secure_media.reddit_video.fallback_url
+						: false,
+				reddit_height:
+					entry.data.secure_media && entry.data.secure_media.reddit_video
+						? entry.data.secure_media.reddit_video.height
+						: false,
+				reddit_width:
+					entry.data.secure_media && entry.data.secure_media.reddit_video
+						? entry.data.secure_media.reddit_video.width
+						: false,
 			});
 		});
 		return arrayResponse;

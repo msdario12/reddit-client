@@ -18,6 +18,7 @@ import {
 import { Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { HtmlParser } from "../../components/HtmlParse";
 import { UpsCounter } from "../../components/UpsCounter";
 import {
 	fetchAuthorsFromName,
@@ -54,7 +55,9 @@ const RepliesComment = ({ reply }) => {
 					</Flex>
 				</CardHeader>
 				<CardBody>
-					<Text>{reply.body}</Text>
+					<Text>
+						<HtmlParser content={reply.body_html} />
+					</Text>
 				</CardBody>
 			</Card>
 		);
@@ -83,7 +86,9 @@ const SingleComment = ({ comment, author }) => {
 							</Flex>
 						</CardHeader>
 						<CardBody>
-							<Text>{comment.body}</Text>
+							<Text>
+								<HtmlParser content={comment.body_html} />
+							</Text>
 						</CardBody>
 						<h2>
 							{numberReplies > 0 ? (
