@@ -128,7 +128,7 @@ const CommentLoader = ({ commentId }) => {
 	// Check if the fetch of author data is complete, else return a loading component
 
 	return (
-		<Suspense key={commentId} fallback={"Loading suspense..."}>
+		<Suspense key={commentId} fallback={<p>Cargando suspense...</p>}>
 			<SingleComment comment={comment} author={author} />
 		</Suspense>
 	);

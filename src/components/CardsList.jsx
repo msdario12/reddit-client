@@ -26,8 +26,8 @@ export const CardsList = () => {
 	return (
 		<div>
 			{postsIds.map((postId) => (
-				<Suspense fallback={'Loading suspense posts...'}>
-				<Post verticalWrap={true} key={postId} id={postId} />
+				<Suspense key={postId} fallback={'Loading suspense posts...'}>
+				<Post verticalWrap={true}  id={postId} />
 				</Suspense>
 			))}
 		</div>
