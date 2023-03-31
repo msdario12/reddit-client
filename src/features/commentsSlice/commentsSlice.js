@@ -26,6 +26,15 @@ export const fetchCommentsFromPost = createAsyncThunk(
 				ups: entry.data.ups,
 				// data is parent of replies, is called this way for recursive iteration.
 				data: entry.data ? entry.data : false,
+				author_flair_text: entry.data.author_flair_text
+					? entry.data.author_flair_text
+					: false,
+				author_flair_background_color: entry.data.author_flair_background_color
+					? entry.data.author_flair_background_color
+					: false,
+				author_flair_text_color: entry.data.author_flair_text_color
+					? entry.data.author_flair_text_color
+					: false,
 			};
 			// Get replies inside of obj comment
 			const replies = getNestedReplies(obj);

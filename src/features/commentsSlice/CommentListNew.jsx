@@ -14,6 +14,7 @@ import {
 	AccordionPanel,
 	AccordionIcon,
 	Box,
+	Tag,
 } from "@chakra-ui/react";
 import { Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -50,8 +51,21 @@ const RepliesComment = ({ reply }) => {
 				<CardHeader>
 					<Flex gap={3}>
 						<Avatar name={reply.author} src={avatar.img} />
-						<Heading size={"sm"}>by {reply.author}</Heading>
-						<Text> {renderDate}</Text>
+						<Flex flexDirection={"column"} justifyContent='center'>
+							<Flex gap={3} alignItems='center'>
+								<Heading size={"sm"}>by {reply.author}</Heading>
+								<Text>{renderDate}</Text>
+							</Flex>
+							<Box>
+								<Tag
+									size={"md"}
+									variant='solid'
+									bg={reply.author_flair_background_color}
+									mt='5px'>
+									{reply.author_flair_text}
+								</Tag>
+							</Box>
+						</Flex>
 					</Flex>
 				</CardHeader>
 				<CardBody>
@@ -81,8 +95,21 @@ const SingleComment = ({ comment, author }) => {
 							<Flex gap={3}>
 								<UpsCounter ups={comment.ups} />
 								<Avatar name={author} src={avatar} />
-								<Heading size={"sm"}>by {comment.author}</Heading>
-								<Text> {renderDate}</Text>
+								<Flex flexDirection={"column"} justifyContent='center'>
+									<Flex gap={3} alignItems='center'>
+										<Heading size={"sm"}>by {comment.author}</Heading>
+										<Text>{renderDate}</Text>
+									</Flex>
+									<Box>
+										<Tag
+											size={"md"}
+											variant='solid'
+											bg={comment.author_flair_background_color}
+											mt='5px'>
+											{comment.author_flair_text}
+										</Tag>
+									</Box>
+								</Flex>
 							</Flex>
 						</CardHeader>
 						<CardBody>

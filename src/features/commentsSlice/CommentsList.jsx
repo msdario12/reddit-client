@@ -56,6 +56,15 @@ export function cleanArray(array) {
 				author: reply.data.author ? reply.data.author : false,
 				created: reply.data.created ? reply.data.created : false,
 				ups: reply.data.ups ? reply.data.ups : false,
+				author_flair_text: reply.data.author_flair_text
+					? reply.data.author_flair_text
+					: false,
+				author_flair_background_color: reply.data.author_flair_background_color
+					? reply.data.author_flair_background_color
+					: false,
+				author_flair_text_color: reply.data.author_flair_text_color
+					? reply.data.author_flair_text_color
+					: false,
 			});
 		}
 	});
