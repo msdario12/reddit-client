@@ -11,6 +11,7 @@ import {
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
+import { fetchAuthorsFromName, selectAllAuthorsIds, selectAuthorById } from "../authorsSlice/authorsSlice";
 import { calculateTimeStamp } from "../postsSlice/Post";
 import {
 	fetchCommentsFromPost,
@@ -20,7 +21,7 @@ import {
 } from "./commentsSlice";
 // Determinar cuantas respuestas anidadas existen
 
-function getNestedReplies(comment) {
+export function getNestedReplies(comment) {
 	const replies = [comment];
 	if (
 		comment.data &&
@@ -38,7 +39,7 @@ function getNestedReplies(comment) {
 	return replies;
 }
 
-function cleanArray(array) {
+export function cleanArray(array) {
 	const cleanArray = [];
 	array.forEach((reply) => {
 		if (reply.data) {
@@ -55,14 +56,19 @@ function cleanArray(array) {
 	return cleanArray;
 }
 
-const CommentResponses = ({ comment }) => {
+const CommentResponses = ({ comment, authorsIds }) => {
+	const author = comment.data.author
+	const authorAvatar = useSelector((state) => selectAuthorById(state, author))
+	const img = authorAvatar && authorAvatar.snoovatar_img ? authorAvatar.snoovatar_img : false
 	if (comment.data.replies) {
+
+
 		const replies = comment.data.replies.data.children;
 		const nestedReplies = getNestedReplies(comment);
-		console.log("nested", nestedReplies);
 		const clean = cleanArray(nestedReplies);
-		console.log("clean", clean);
 		const numResponses = replies.length;
+		// Get avatar for the author of comment
+		
 		let render = [];
 		let i = 0;
 		let count
@@ -87,7 +93,7 @@ const CommentResponses = ({ comment }) => {
 							</CardHeader>
 							<CardBody>
 								<Text>{reply.body}</Text>
-								{/* <Text>{nestedReplies} respuestas</Text> */}
+								{img}
 							</CardBody>
 						</Card>
 					</GridItem>
@@ -103,6 +109,7 @@ const CommentResponses = ({ comment }) => {
 						<Card key={reply.created} my={1} bg='blue.300'>
 							<CardBody>
 								<Text>Show more {reply.body}</Text>
+								
 							</CardBody>
 						</Card>
 					</GridItem>
@@ -122,8 +129,27 @@ const CommentResponses = ({ comment }) => {
 };
 
 const SingleComment = ({ commentId }) => {
+	const dispatch = useDispatch()
 	const comment = useSelector((state) => selectCommentById(state, commentId));
 	const renderDate = calculateTimeStamp(comment.created);
+
+	const authorStatus = useSelector(state => state.authors.status)
+	const authorsIds = useSelector(selectAllAuthorsIds)
+
+	useEffect(() => {
+		if (authorStatus === 'iddle') {
+			dispatch(fetchAuthorsFromName(comment.data.author))
+		}
+	},[dispatch, authorStatus, comment.data.author])
+	
+	let content
+
+	if (authorStatus === 'loading' && !comment.data) {
+		content = 'Cargando autor'
+	} else if (authorStatus === 'succeeded' && comment.data) {
+		content = <CommentResponses comment={comment} author={authorsIds} />
+	}
+
 	return (
 		<>
 			<Card my={3} key={commentId}>
@@ -138,7 +164,7 @@ const SingleComment = ({ commentId }) => {
 				</CardBody>
 			</Card>
 
-			{comment.data && <CommentResponses comment={comment} />}
+			{content}
 		</>
 	);
 };

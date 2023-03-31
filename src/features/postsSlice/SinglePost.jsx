@@ -21,10 +21,16 @@ import { useEffect } from "react";
 import { fetchPostsFromCategory } from "../postsSlice/postsSlice";
 import { useDispatch } from "react-redux";
 import { Post } from "./Post";
+import { CommentListNew } from "../commentsSlice/CommentListNew";
+import { selectAllCommentsIds } from "../commentsSlice/commentsSlice";
 
 const ExcerptSinglePost = () => {
+	// Post selectors and data
 	const postId = useLoaderData();
 	const post = useSelector((state) => selectPostById(state, postId));
+	// Comments selectors
+	const commentsIds = useSelector(selectAllCommentsIds)
+	// Fetch author for every comment author (and reply also)
 
 	if (!post) {
 		return "Esperando a post";
@@ -33,15 +39,18 @@ const ExcerptSinglePost = () => {
 	return (
 		<>
 			<Post id={postId} />
-			<CommentList permalink={post.permalink} />
+			{/* <CommentList permalink={post.permalink} /> */}
+			<CommentListNew commentsIds={commentsIds} />
 		</>
 	);
 };
 
-export const SinglePost = () => {
-	const postId = useLoaderData();
 
+export const SinglePost = () => {
+	// Post things
+	const postId = useLoaderData();
 	const statusPost = useSelector((state) => state.posts.status);
+	// Comments things
 	const statusComments = useSelector((state) => state.comments.status);
 
 	if (statusPost === "loading" || statusComments === "loading") {
