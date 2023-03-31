@@ -8,6 +8,12 @@ import {
 	Grid,
 	GridItem,
 	Avatar,
+	Accordion,
+	AccordionItem,
+	AccordionButton,
+	AccordionPanel,
+	AccordionIcon,
+	Box,
 } from "@chakra-ui/react";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
@@ -38,8 +44,7 @@ const RepliesComment = ({ reply }) => {
 		return <Text>{reply.body}</Text>;
 	} else if (avatar) {
 		return (
-			<li>
-				<Card my={3} key={reply.id} bg='blackAlpha.300'>
+				<Card my={3} key={reply.id} bg='blackAlpha.100'>
 					<CardHeader>
 						<Flex gap={3}>
 							<Avatar name={reply.author} src={avatar.img} />
@@ -51,7 +56,6 @@ const RepliesComment = ({ reply }) => {
 						<Text>{reply.body}</Text>
 					</CardBody>
 				</Card>
-			</li>
 		);
 	}
 };
@@ -59,29 +63,49 @@ const RepliesComment = ({ reply }) => {
 const SingleComment = ({ comment, author }) => {
 	const authorData = useSelector((state) => selectAuthorById(state, author));
 	const avatar = authorData && authorData.img ? authorData.img : "none";
-
+	// Calculate timestamp of comment
 	const renderDate = calculateTimeStamp(comment.created);
+	// Get number of replies of each comment
+	const numberReplies = comment.replies.length
 
 	return (
 		<div>
-			<Card my={3} key={comment.id}>
-				<CardHeader>
-					<Flex gap={3}>
-						<Avatar name={author} src={avatar} />
-						<Heading size={"sm"}>by {comment.author}</Heading>
-						<Text> {renderDate}</Text>
-					</Flex>
-				</CardHeader>
-				<CardBody>
-					<Text>{comment.body}</Text>
-				</CardBody>
-			</Card>
+			<Accordion defaultIndex={[1]} allowMultiple>
+				<AccordionItem>
+					<Card my={3} key={comment.id}>
+						<CardHeader>
+							<Flex gap={3}>
+								<Avatar name={author} src={avatar} />
+								<Heading size={"sm"}>by {comment.author}</Heading>
+								<Text> {renderDate}</Text>
+							</Flex>
+						</CardHeader>
+						<CardBody>
+							<Text>{comment.body}</Text>
+						</CardBody>
+						<h2>
+						{numberReplies > 0 ? (
+							<AccordionButton>
+								<Box as='span' flex='1' textAlign='left'>
+									{numberReplies + ' Replies'}
+								</Box>
+								<AccordionIcon />
+							</AccordionButton>
+						) : <></>}
+							
+						</h2>
+					</Card>
 
-			<ul>
-				{comment.replies.map(
-					(reply) => reply.body.length > 2 && <RepliesComment reply={reply} />
-				)}
-			</ul>
+					<AccordionPanel pb={4}>
+							{comment.replies.map(
+								(reply) =>
+									reply.body.length > 2 && (
+										<RepliesComment key={reply.id} reply={reply} />
+									)
+							)}
+					</AccordionPanel>
+				</AccordionItem>
+			</Accordion>
 		</div>
 	);
 };
