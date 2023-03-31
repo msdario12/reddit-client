@@ -36,11 +36,11 @@ export const fetchPostsFromCategory = createAsyncThunk(
 				link_flair_text: entry.data.link_flair_text
 					? entry.data.link_flair_text
 					: false,
-				link_flair_background_color: entry.link_flair_background_color
-					? entry.link_flair_background_color
+				link_flair_background_color: entry.data.link_flair_background_color
+					? entry.data.link_flair_background_color
 					: false,
-				author_flair_text_color: entry.author_flair_text_color
-					? entry.author_flair_text_color
+				author_flair_text_color: entry.data.author_flair_text_color
+					? entry.data.author_flair_text_color
 					: false,
 				content: entry.data.selftext_html,
 				content_text: entry.data.selftext,

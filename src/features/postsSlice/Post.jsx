@@ -12,6 +12,7 @@ import {
 	Heading,
 	Text,
 	IconButton,
+	Tag,
 } from "@chakra-ui/react";
 import { connect, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -50,7 +51,7 @@ export const Post = ({ id, verticalWrap }) => {
 	}
 
 	const renderTextBody = () => {
-		if (verticalWrap) {
+		if (verticalWrap && post.content_text.length > 0) {
 			return post.content_text.substring(0, 340) + "...";
 		}
 		return content;
@@ -58,11 +59,11 @@ export const Post = ({ id, verticalWrap }) => {
 
 	return (
 		<div>
-			<Card maxW='container.lg' my={"2rem"} overflow={"hidden"}>
+			<Card maxW='container.lg' my={"1rem"} overflow={"hidden"}>
 				<CardHeader>
-					<Flex spacing='4'>
-						<Flex flex='1' gap='4' flexWrap='wrap' flexDirection={"column"}>
-							<Flex gap={4}>
+					<Flex spacing='3'>
+						<Flex flex='1' gap='3' flexWrap='wrap' flexDirection={"column"}>
+							<Flex gap={3}>
 								<UpsCounter ups={post.ups} />
 								<Box>
 									<Heading size='sm'>
@@ -72,6 +73,15 @@ export const Post = ({ id, verticalWrap }) => {
 							</Flex>
 							<Link to={post.permalink}>
 								<Heading size={"md"}>{post.title}</Heading>
+								{post.link_flair_text && (
+									<Tag
+										size={"md"}
+										variant='solid'
+										bg={post.link_flair_background_color}
+										mt='5px'>
+										{post.link_flair_text}
+									</Tag>
+								)}
 							</Link>
 						</Flex>
 						<IconButton
@@ -83,10 +93,8 @@ export const Post = ({ id, verticalWrap }) => {
 				</CardHeader>
 
 				<CardBody>
+					{renderTextBody()}
 					<Link to={post.permalink}>
-						{/* Content of post */}
-						{renderTextBody()}
-
 						{post.is_reddit_media_domain && !post.reddit_video_url && (
 							<Image
 								objectFit='cover'
