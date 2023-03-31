@@ -6,10 +6,13 @@ import {
 // https://www.reddit.com/user/salty-sarge-av8r/about.json
 // Parse img
 const parseImg = (img) => {
-	if (img.slice(-4).includes(".png")) {
+	if (!img) {
+		return;
+	}
+	if (img.slice(-4).includes("png")) {
 		return img;
 	} else {
-		const index = img.indexOf(".jpg");
+		const index = img.indexOf("jpg");
 		return img.slice(0, index + 4);
 	}
 };
@@ -37,18 +40,22 @@ export const fetchAuthorsFromName = createAsyncThunk(
 			.map((result) => result.value);
 
 		// return successfulResults;
-		successfulResults.map((obj) =>
-			output.push({
-				id: obj.data.data.name,
-				id_name: obj.data.data.id,
-				link_karma: obj.data.data.link_karma,
-				total_karma: obj.data.data.total_karma,
-				comment_karma: obj.data.data.comment_karma,
-				created: obj.data.data.created,
-				img: obj.data.data.snoovatar_img
-					? obj.data.data.snoovatar_img
-					: parseImg(obj.data.data.icon_img),
-			})
+		
+		successfulResults.map((obj) =>{
+			if (obj.data.data) {
+				output.push({
+					id: obj.data.data.name,
+					id_name: obj.data.data.id,
+					link_karma: obj.data.data.link_karma,
+					total_karma: obj.data.data.total_karma,
+					comment_karma: obj.data.data.comment_karma,
+					created: obj.data.data.created,
+					img: obj.data.data.snoovatar_img
+						? obj.data.data.snoovatar_img
+						: parseImg(obj.data.data.icon_img),
+				})
+			}
+			}
 		);
 		return output;
 	}
@@ -68,7 +75,7 @@ const authorsSlice = createSlice({
 	extraReducers: (builder) => {
 		builder
 			.addCase(fetchAuthorsFromName.fulfilled, (state, action) => {
-				authorsAdapter.addMany(state, action.payload);
+				authorsAdapter.setAll(state, action.payload);
 				state.status = "succeeded";
 				state.error = null;
 			})
