@@ -1,29 +1,29 @@
-import { Box, Grid, GridItem } from "@chakra-ui/react";
+import { Box, Grid, GridItem, useColorModeValue } from "@chakra-ui/react";
 import { Outlet } from "react-router-dom";
 
 // components
 import { Header } from "../components/Header";
 import { CategoriesTab } from "../features/categoriesSlice/CategoriesTab";
-import { fetchPostsFromCategory } from "../features/postsSlice/postsSlice";
-import { useDispatch } from "react-redux";
 
 export default function RootLayout() {
-	const dispatch = useDispatch();
 	return (
 		<div>
 			<Box as='nav' pb={20}>
 				<Header />
 			</Box>
 
-			<Grid templateColumns='repeat(8, 1fr)' bg='gray.50'>
+			<Grid templateColumns='repeat(8, 1fr)'>
 				{/* sidebar */}
 				<GridItem
 					as='aside'
-					colSpan={{ base: 8, lg: 2, xl: 1 }}
-					bg='purple.400'
+					colSpan={{ base: 8, lg: 2, xl: 2 }}
 					minHeight={{ lg: "100vh" }}
+					bg={useColorModeValue("gray.300", "black")}
 					p={{ base: "20px", lg: "30px" }}>
-					<Box>
+					<Box
+						display={{ base: "none", lg: "block" }}
+						position={"sticky"}
+						top={20}>
 						<CategoriesTab />
 					</Box>
 				</GridItem>
