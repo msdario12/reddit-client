@@ -1,13 +1,14 @@
 import "./App.css";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { CardsList } from './components/CardsList';
-import { SinglePost } from './features/postsSlice/SinglePost';
+import { Suspense, lazy } from "react";
 import RootLayout from "./layouts/RootLayout";
 import store from "./app/store";
-import { fetchCommentsFromPost } from './features/commentsSlice/commentsSlice';
-import { useSelector } from 'react-redux';
-import { fetchPostsFromCategory } from './features/postsSlice/postsSlice';
+import { fetchCommentsFromPost } from "./features/commentsSlice/commentsSlice";
+import { fetchPostsFromCategory } from "./features/postsSlice/postsSlice";
 
+// Lazy import
+// const CardsList = lazy(() => import("./components/CardsList"));
+// const SinglePost = lazy(() => import("./features/postsSlice/SinglePost"));
 
 const router = createBrowserRouter([
 	{
@@ -17,27 +18,40 @@ const router = createBrowserRouter([
 		children: [
 			{
 				path: "/",
-				element: <CardsList />,
-				loader: () => {
-					store.dispatch(fetchPostsFromCategory(`/r/Home`))
-					return null
+				async lazy() {
+					let { CardsList } = await import("./components/CardsList");
+					return { Component: CardsList };
 				},
 
+				loader: () => {
+					store.dispatch(fetchPostsFromCategory(`/r/Home`));
+					return null;
+				},
 			},
 			{
 				path: "r/:categoryId",
-				element: <CardsList />,
+				async lazy() {
+					let { CardsList } = await import("./components/CardsList");
+					return { Component: CardsList };
+				},
 				loader: ({ params }) => {
-					store.dispatch(fetchPostsFromCategory(`/r/${params.categoryId}`))
+					store.dispatch(fetchPostsFromCategory(`/r/${params.categoryId}`));
 					return params.categoryId;
 				},
 			},
 			{
 				path: "r/:categoryId/comments/:postId/:postTitle",
-				element: <SinglePost />,
+				async lazy() {
+					let { SinglePost } = await import("./features/postsSlice/SinglePost");
+					return { Component: SinglePost };
+				},
 				loader: ({ params }) => {
-					store.dispatch(fetchCommentsFromPost(`/r/${params.categoryId}/comments/${params.postId}/${params.postTitle}`))
-					store.dispatch(fetchPostsFromCategory(`/r/${params.categoryId}`))
+					store.dispatch(
+						fetchCommentsFromPost(
+							`/r/${params.categoryId}/comments/${params.postId}/${params.postTitle}`
+						)
+					);
+					store.dispatch(fetchPostsFromCategory(`/r/${params.categoryId}`));
 					return params.postId;
 				},
 			},
@@ -46,9 +60,7 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return (
-    <RouterProvider router={router} />
-  );
+	return <RouterProvider router={router} />;
 }
 
 export default App;

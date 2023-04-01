@@ -1,179 +1,105 @@
-import {
-	Card,
-	CardBody,
-	CardHeader,
-	Heading,
-	Text,
-	Flex,
-	Grid,
-	GridItem,
-	Avatar,
-	Accordion,
-	AccordionItem,
-	AccordionButton,
-	AccordionPanel,
-	AccordionIcon,
-	Box,
-	Tag,
-} from "@chakra-ui/react";
 import { Suspense, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import { HtmlParser } from "../../components/HtmlParse";
-import { UpsCounter } from "../../components/UpsCounter";
 import {
-	fetchAuthorsFromName,
-	selectAllAuthorsIds,
 	selectAuthorById,
 } from "../authorsSlice/authorsSlice";
 import { calculateTimeStamp } from "../postsSlice/Post";
-import { cleanArray, getNestedReplies } from "./CommentsList";
 import {
-	fetchCommentsFromPost,
-	selectAllComments,
-	selectAllCommentsIds,
 	selectCommentById,
 } from "./commentsSlice";
+import { Comment } from "../../components/Comment";
 
-const RepliesComment = ({ reply }) => {
-	const dispatch = useDispatch();
-	// Get status of authors slice
-	// Get avatar of author of reply
-	const avatar = useSelector((state) => selectAuthorById(state, reply.author));
-	// console.log("avatar", avatar);
-	const renderDate = calculateTimeStamp(reply.created);
+// const RepliesComment = ({ reply }) => {
+// 	const dispatch = useDispatch();
+// 	// Get status of authors slice
+// 	// Get avatar of author of reply
+// 	const avatar = useSelector((state) => selectAuthorById(state, reply.author));
+// 	// console.log("avatar", avatar);
+// 	const renderDate = calculateTimeStamp(reply.created);
 
-	if (!avatar) {
-		return <Text>{reply.body}</Text>;
-	} else if (avatar) {
-		return (
-			<Card my={3} key={reply.id} bg='blackAlpha.100'>
-				<CardHeader>
-					<Flex gap={3}>
-						<Avatar name={reply.author} src={avatar.img} />
-						<Flex flexDirection={"column"} justifyContent='center'>
-							<Flex gap={3} alignItems='center'>
-								<Heading size={"sm"}>by {reply.author}</Heading>
-								<Text>{renderDate}</Text>
-							</Flex>
-							<Box>
-								{reply.author_flair_text && (
-									<Tag
-										size={"md"}
-										variant='solid'
-										bg={
-											reply.author_flair_background_color === "transparent"
-												? "teal"
-												: reply.author_flair_background_color
-										}
-										mt='5px'>
-										{reply.author_flair_text}
-									</Tag>
-								)}
-							</Box>
-						</Flex>
-					</Flex>
-				</CardHeader>
-				<CardBody>
-					<Text>
-						<HtmlParser content={reply.body_html} />
-					</Text>
-				</CardBody>
-			</Card>
-		);
-	}
-};
+// 	if (!avatar) {
+// 		return <Text>{reply.body}</Text>;
+// 	} else if (avatar) {
+// 		return (
+// 			<Card my={3} key={reply.id} bg='blackAlpha.100'>
+// 				<CardHeader>
+// 					<Flex gap={3}>
+// 						<Avatar name={reply.author} src={avatar.img} />
+// 						<Flex flexDirection={"column"} justifyContent='center'>
+// 							<Flex gap={3} alignItems='center'>
+// 								<Heading size={"sm"}>by {reply.author}</Heading>
+// 								<Text>{renderDate}</Text>
+// 							</Flex>
+// 							<Box>
+// 								{reply.author_flair_text && (
+// 									<Tag
+// 										size={"md"}
+// 										variant='solid'
+// 										bg={
+// 											reply.author_flair_background_color === "transparent"
+// 												? "teal"
+// 												: reply.author_flair_background_color
+// 										}
+// 										mt='5px'>
+// 										{reply.author_flair_text}
+// 									</Tag>
+// 								)}
+// 							</Box>
+// 						</Flex>
+// 					</Flex>
+// 				</CardHeader>
+// 				<CardBody>
+// 					<Text>
+// 						<HtmlParser content={reply.body_html} />
+// 					</Text>
+// 				</CardBody>
+// 			</Card>
+// 		);
+// 	}
+// };
 
 const SingleComment = ({ comment, author }) => {
-	const authorData = useSelector((state) => selectAuthorById(state, author));
-	const avatar = authorData && authorData.img ? authorData.img : "none";
-	// Calculate timestamp of comment
-	const renderDate = calculateTimeStamp(comment.created);
-	// Get number of replies of each comment
-	const numberReplies = comment.replies.length;
 
 	return (
-		<div>
-			<Accordion defaultIndex={[1]} allowMultiple>
-				<AccordionItem>
-					<Card my={3} key={comment.id}>
-						<CardHeader>
-							<Flex gap={3}>
-								<UpsCounter ups={comment.ups} />
-								<Avatar name={author} src={avatar} />
-								<Flex flexDirection={"column"} justifyContent='center'>
-									<Flex gap={3} alignItems='center'>
-										<Heading size={"sm"}>by {comment.author}</Heading>
-										<Text>{renderDate}</Text>
-									</Flex>
-									<Box>
-										{comment.author_flair_text && (
-											<Tag
-												size={"md"}
-												variant='solid'
-												bg={
-													comment.author_flair_background_color ===
-													"transparent"
-														? "teal"
-														: comment.author_flair_background_color
-												}
-												mt='5px'>
-												{comment.author_flair_text}
-											</Tag>
-										)}
-									</Box>
-								</Flex>
-							</Flex>
-						</CardHeader>
-						<CardBody>
-							<Text>
-								<HtmlParser content={comment.body_html} />
-							</Text>
-						</CardBody>
-						<h2>
-							{numberReplies > 0 ? (
-								<AccordionButton>
-									<Box as='span' flex='1' textAlign='left'>
-										{numberReplies + " Replies"}
-									</Box>
-									<AccordionIcon />
-								</AccordionButton>
-							) : (
-								<></>
-							)}
-						</h2>
-					</Card>
-
-					<AccordionPanel pb={4}>
-						{comment.replies.map(
-							(reply) =>
-								reply.body.length > 2 && (
-									<RepliesComment key={reply.id} reply={reply} />
-								)
-						)}
-					</AccordionPanel>
-				</AccordionItem>
-			</Accordion>
-		</div>
+		<Suspense fallback={<p>Cargando suspense...</p>}>
+			<Comment
+				commentId={comment.id}
+				commentUps={comment.ups}
+				author={author}
+				created={comment.created}
+				author_flair_text={comment.author_flair_text}
+				author_flair_background_color={comment.author_flair_background_color}
+				body_html={comment.body_html}
+				numberReplies={comment.replies.length}>
+				{comment.replies.map(
+					(reply) =>
+						reply.body.length > 2 && (
+							<Comment
+								commentId={reply.id}
+								commentUps={reply.ups}
+								author={reply.author}
+								created={reply.created}
+								author_flair_text={reply.author_flair_text}
+								author_flair_background_color={
+									reply.author_flair_background_color
+								}
+								body_html={reply.body_html}
+							/>
+						)
+				)}
+			</Comment>
+		</Suspense>
 	);
 };
 
 const CommentLoader = ({ commentId }) => {
-	const dispatch = useDispatch();
 	// Get comment from the specific id
 	const comment = useSelector((state) => selectCommentById(state, commentId));
 
-	// Get status of authors slice
-	const authorsStatus = useSelector((state) => state.authors.status);
 	const author = comment.author;
-	// Fetch author avatar for that comment, only when "author" change
-	// useEffect(() => {
-	// 	if (authorsStatus === "iddle" || authorsStatus === "succeeded") {
-	// 		dispatch(fetchAuthorsFromName(author));
-	// 	}
-	// }, [author]);
-	// Check if the fetch of author data is complete, else return a loading component
 
+	// Check if the fetch of author data is complete, else return a loading component
 	return (
 		<Suspense key={commentId} fallback={<p>Cargando suspense...</p>}>
 			<SingleComment comment={comment} author={author} />

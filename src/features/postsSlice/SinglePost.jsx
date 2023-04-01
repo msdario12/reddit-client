@@ -5,6 +5,9 @@ import { Post } from "./Post";
 import { CommentListNew } from "../commentsSlice/CommentListNew";
 import { selectAllCommentsIds } from "../commentsSlice/commentsSlice";
 
+import { ChakraProvider, Box, Text, Image, Flex } from "@chakra-ui/react";
+import { Suspense } from "react";
+
 const ExcerptSinglePost = () => {
 	// Post selectors and data
 	const postId = useLoaderData();
@@ -33,13 +36,9 @@ export const SinglePost = () => {
 	// Comments things
 	const statusComments = useSelector((state) => state.comments.status);
 
-	if (statusPost === "loading" || statusComments === "loading") {
-		return (
-			<>
-				<div>Hola padre cargando cositas</div>
-			</>
-		);
-	} else if (statusPost === "succeeded" && statusComments === "succeeded") {
-		return <ExcerptSinglePost postId={postId} />;
-	}
+	return (
+		<Suspense fallback={<div>Loading cositas...</div>}>
+			<ExcerptSinglePost postId={postId} />
+		</Suspense>
+	);
 };

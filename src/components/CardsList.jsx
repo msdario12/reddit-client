@@ -17,17 +17,11 @@ export const CardsList = () => {
 		}
 	}, [categoryId, dispatch]);
 
-	console.log('fromCardList', categoryId)
-
-	if (statusPost === "loading") {
-		return "Loading";
-	}
-
 	return (
 		<div>
 			{postsIds.map((postId) => (
-				<Suspense key={postId} fallback={'Loading suspense posts...'}>
-				<Post verticalWrap={true}  id={postId} />
+				<Suspense key={postId} fallback={"Loading suspense posts..."}>
+					<Post verticalWrap={true} id={postId} />
 				</Suspense>
 			))}
 		</div>
