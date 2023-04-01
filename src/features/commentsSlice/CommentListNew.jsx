@@ -5,8 +5,8 @@ import { selectAuthorById } from "../authorsSlice/authorsSlice";
 import { calculateTimeStamp } from "../postsSlice/Post";
 import { selectCommentById } from "./commentsSlice";
 import LazyLoad from "react-lazy-load";
-
-import Comment  from "../../components/Comment";
+import "../../components/lazyStyle.css";
+import Comment from "../../components/Comment";
 
 // const Comment = lazy(() => import("../../components/Comment"));
 
@@ -62,34 +62,34 @@ import Comment  from "../../components/Comment";
 const SingleComment = ({ comment, author }) => {
 	return (
 		<LazyLoad offset={300}>
-				<Comment
-					commentId={comment.id}
-					commentUps={comment.ups}
-					author={author}
-					created={comment.created}
-					author_flair_text={comment.author_flair_text}
-					author_flair_background_color={comment.author_flair_background_color}
-					body_html={comment.body_html}
-					numberReplies={comment.replies.length}>
-					{comment.replies.map(
-						(reply) =>
-							reply.body.length > 2 && (
-								<LazyLoad>
-									<Comment
-										commentId={reply.id}
-										commentUps={reply.ups}
-										author={reply.author}
-										created={reply.created}
-										author_flair_text={reply.author_flair_text}
-										author_flair_background_color={
-											reply.author_flair_background_color
-										}
-										body_html={reply.body_html}
-									/>
-								</LazyLoad>
-							)
-					)}
-				</Comment>
+			<Comment
+				commentId={comment.id}
+				commentUps={comment.ups}
+				author={author}
+				created={comment.created}
+				author_flair_text={comment.author_flair_text}
+				author_flair_background_color={comment.author_flair_background_color}
+				body_html={comment.body_html}
+				numberReplies={comment.replies.length}>
+				{comment.replies.map(
+					(reply) =>
+						reply.body.length > 2 && (
+							<LazyLoad>
+								<Comment
+									commentId={reply.id}
+									commentUps={reply.ups}
+									author={reply.author}
+									created={reply.created}
+									author_flair_text={reply.author_flair_text}
+									author_flair_background_color={
+										reply.author_flair_background_color
+									}
+									body_html={reply.body_html}
+								/>
+							</LazyLoad>
+						)
+				)}
+			</Comment>
 		</LazyLoad>
 	);
 };

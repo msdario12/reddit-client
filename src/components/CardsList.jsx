@@ -4,6 +4,8 @@ import { selectAllPostsIds } from "../features/postsSlice/postsSlice";
 import { useLoaderData } from "react-router-dom";
 import { Suspense, useEffect } from "react";
 import { fetchPostsFromCategory } from "../features/postsSlice/postsSlice";
+import LazyLoad from "react-lazy-load";
+import "./lazyStyle.css";
 
 export const CardsList = () => {
 	const dispatch = useDispatch();
@@ -20,9 +22,9 @@ export const CardsList = () => {
 	return (
 		<div>
 			{postsIds.map((postId) => (
-				<Suspense key={postId} fallback={"Loading suspense posts..."}>
+				<LazyLoad key={postId} offset={100} threshold={0.95}>
 					<Post verticalWrap={true} id={postId} />
-				</Suspense>
+				</LazyLoad>
 			))}
 		</div>
 	);
