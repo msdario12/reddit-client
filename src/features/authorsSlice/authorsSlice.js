@@ -12,7 +12,7 @@ const parseImg = (img) => {
 	if (img.slice(-4).includes("png")) {
 		return img;
 	} else {
-		const index = img.indexOf("jpg");
+		const index = img.indexOf("png");
 		return img.slice(0, index + 4);
 	}
 };
@@ -50,9 +50,7 @@ export const fetchAuthorsFromName = createAsyncThunk(
 					total_karma: obj.data.data.total_karma,
 					comment_karma: obj.data.data.comment_karma,
 					created: obj.data.data.created,
-					img: obj.data.data.snoovatar_img
-						? obj.data.data.snoovatar_img
-						: parseImg(obj.data.data.icon_img),
+					img: parseImg(obj.data.data.icon_img),
 				});
 			}
 		});
