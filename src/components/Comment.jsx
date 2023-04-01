@@ -20,7 +20,7 @@ import { useSelector } from "react-redux";
 import { selectAuthorById } from "../features/authorsSlice/authorsSlice";
 import { calculateTimeStamp } from "../features/postsSlice/Post";
 
-export const Comment = (props) => {
+const Comment = (props) => {
 	const {
 		commentId,
 		commentUps,
@@ -92,3 +92,5 @@ export const Comment = (props) => {
 		</Accordion>
 	);
 };
+
+export default Comment

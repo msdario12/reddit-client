@@ -1,14 +1,14 @@
-import { Suspense, useEffect } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { useDispatch } from "react-redux";
 import { useSelector } from "react-redux";
-import {
-	selectAuthorById,
-} from "../authorsSlice/authorsSlice";
+import { selectAuthorById } from "../authorsSlice/authorsSlice";
 import { calculateTimeStamp } from "../postsSlice/Post";
-import {
-	selectCommentById,
-} from "./commentsSlice";
-import { Comment } from "../../components/Comment";
+import { selectCommentById } from "./commentsSlice";
+
+
+// import { Comment } from "../../components/Comment";
+
+const Comment = lazy(() => import("../../components/Comment"))
 
 // const RepliesComment = ({ reply }) => {
 // 	const dispatch = useDispatch();
@@ -60,7 +60,6 @@ import { Comment } from "../../components/Comment";
 // };
 
 const SingleComment = ({ comment, author }) => {
-
 	return (
 		<Suspense fallback={<p>Cargando suspense...</p>}>
 			<Comment
@@ -75,17 +74,19 @@ const SingleComment = ({ comment, author }) => {
 				{comment.replies.map(
 					(reply) =>
 						reply.body.length > 2 && (
-							<Comment
-								commentId={reply.id}
-								commentUps={reply.ups}
-								author={reply.author}
-								created={reply.created}
-								author_flair_text={reply.author_flair_text}
-								author_flair_background_color={
-									reply.author_flair_background_color
-								}
-								body_html={reply.body_html}
-							/>
+							<Suspense key={reply.id} fallback={<p>Cargando suspense...</p>}>
+								<Comment
+									commentId={reply.id}
+									commentUps={reply.ups}
+									author={reply.author}
+									created={reply.created}
+									author_flair_text={reply.author_flair_text}
+									author_flair_background_color={
+										reply.author_flair_background_color
+									}
+									body_html={reply.body_html}
+								/>
+							</Suspense>
 						)
 				)}
 			</Comment>
